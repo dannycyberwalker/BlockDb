@@ -1,4 +1,4 @@
-﻿namespace BlockDb;
+﻿namespace BlockDb.Models;
 
 internal class Segment
 {
@@ -19,3 +19,18 @@ internal class Segment
 
     public string FileName => $"{FilePrefix};{CreationDate.ToString("O").Replace(':', ';')}.bin";
 }
+
+internal interface ICommand
+{
+    Guid Key { get; }
+}
+internal record WriteCommand(Guid Key, string Value) : ICommand;
+internal record ReadCommand(Guid Key) : ICommand;
+internal record CompletedCommand(Guid Key, string Value, CommandStatus Status): ICommand;
+
+internal enum CommandStatus
+{
+    Failed = 0,
+    Successful = 1,
+    NotFound = 2,
+} 
